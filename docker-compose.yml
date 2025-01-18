@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  backend:
+    container_name: espresso
+    build:
+      context: ./espresso/
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./espresso/src:/code/api/src
+      - /code/api/node_modules
+      - ./.env:/code/api/.env
+    ports:
+      - '8000:8000'
+      - '9229:9229'
+    command: ["node", "--inspect=0.0.0.0:9229", "src/index.js"]
+    environment:
+      - TZ=Asia/Kolkata 
+    depends_on:
+      - database
+    networks:
+      - 'matrix'
+  database:
+    container_name: database
+    build:
+      context: ./database/
+      dockerfile: Dockerfile.dev
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - matrix
+    env_file:
+      - ./.env
+
+volumes:
+  postgres_data:
+
+networks:
+  matrix:
+    driver: bridge

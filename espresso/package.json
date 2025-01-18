@@ -1,0 +1,35 @@
+{
+  "name": "espresso",
+  "version": "1.0.0",
+  "description": "backend service ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "JS",
+    "express"
+  ],
+  "author": "Surya",
+  "license": "ISC",
+  "dependencies": {
+    "@sequelize/postgres": "^7.0.0-alpha.43",
+    "body-parser": "1.20.3",
+    "dotenv": "16.4.7",
+    "espresso": "file:",
+    "express": "4.21.2",
+    "nodemon": "3.0.3",
+    "pg": "8.13.1",
+    "pg-hstore": "2.3.4",
+    "sequelize": "6.37.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.18.0",
+    "eslint": "9.18.0",
+    "eslint-config-prettier": "10.0.1",
+    "globals": "15.14.0",
+    "prettier": "3.4.2",
+    "sequelize-cli": "6.6.2"
+  }
+}
