@@ -9,6 +9,7 @@ services:
       - ./espresso/src:/code/api/src
       - /code/api/node_modules
       - ./.env:/code/api/.env
+      - ./.env:/code/api/src/.env
     ports:
       - '8000:8000'
       - '9229:9229'

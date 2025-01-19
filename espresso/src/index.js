@@ -1,16 +1,14 @@
-import express from 'express';
-
-
-import config from "./config/server-config.js";
-
-const { APP_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, APP_HOST } = config;
+const express = require('express')
+const config = require('./config/server-config.js');
+const { DB_USER, DB_PASSWORD, DB_NAME, DB_HOST, APP_HOST, APP_PORT } = config;
 
 const app = express();
 
 // Access environment variables
-const port = APP_PORT || 3000;
+const port = APP_PORT || 8000;
 
 app.get('/', (req, res) => {
+  createUserWithAddresses();
   res.send(`Welcome to  ${DB_HOST}!,${DB_USER}!, ${DB_PASSWORD}!, ${DB_NAME}!!`);
 });
 
