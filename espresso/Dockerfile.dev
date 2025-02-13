@@ -12,3 +12,5 @@ COPY src/ ./src
 
 #DEV
 EXPOSE 8000 9229
+
+CMD ["npm", "run", "dev"]

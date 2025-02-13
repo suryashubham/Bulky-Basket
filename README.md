@@ -25,3 +25,9 @@ In this setup, the Address model will have a column userId that references the i
 
 3. Migrate command `npx sequelize-cli db:migrate`
 4. Undo a particular migration `sequelize db:migrate:undo --name <migration_file_name>`
+
+## PSQL DB
+psql -U <username> -d <database_name>
+psql -U surya -d espresso-database
+select * from public."Users";
+
