@@ -12,4 +12,5 @@ module.exports = {
   APP_HOST: process.env.APP_HOST,
   APP_PORT: process.env.APP_PORT,
   APP_NAME: process.env.APP_NAME,
+  APP_ENV: process.env.APP_ENV,
 }

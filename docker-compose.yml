@@ -10,6 +10,7 @@ services:
       - /code/api/node_modules
       - ./.env:/code/api/.env
       - ./.env:/code/api/src/.env
+      - ./espresso/logs:/code/api/logs  # Mounts the 'logs' directory from host to container.
     ports:
       - '8000:8000'
       - '9229:9229'
