@@ -1,15 +1,14 @@
-const express = require('express')
-const { APP_HOST, APP_PORT } = require('./config/server-config.js');
-const logger = require('./utils/logger.js');
+const express = require('express');
+const { APP_HOST, APP_PORT } = require('./config/server-config');
+const apiRoutes = require('./routes');
 
 
 const app = express();
 
-app.get('/', (req, res) => {
-  logger.info('Request received');
-  res.send(`Welcome to xyz !!`);
-  logger.error('Request processed');
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api', apiRoutes);
 
 app.listen(APP_PORT, () => {
   console.log(`Server running on the http://${APP_HOST}:${APP_PORT}`);

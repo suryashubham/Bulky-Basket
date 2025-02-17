@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { BaseError } = require('./base-error.js');
+const BaseError = require('./base-error.js');
 
 class AuthorizationError extends BaseError {
     constructor(message) {

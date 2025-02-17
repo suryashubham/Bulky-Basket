@@ -1,7 +1,7 @@
 const winston = require('winston');
 const moment = require('moment-timezone');
 require('winston-daily-rotate-file'); // This registers the transport
-const { APP_ENV } = require('../config/server-config.js');
+const { APP_ENV } = require('../../config/server-config.js');
 
 // Create a custom format that adds UTC and local timestamps to the log info
 const addTimestamps = winston.format((info) => {
