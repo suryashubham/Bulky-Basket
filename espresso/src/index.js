@@ -1,19 +1,16 @@
-import express from 'express';
+const express = require('express')
+const { APP_HOST, APP_PORT } = require('./config/server-config.js');
+const logger = require('./utils/logger.js');
 
-
-import config from "./config/server-config.js";
-
-const { APP_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, APP_HOST } = config;
 
 const app = express();
 
-// Access environment variables
-const port = APP_PORT || 3000;
-
 app.get('/', (req, res) => {
-  res.send(`Welcome to  ${DB_HOST}!,${DB_USER}!, ${DB_PASSWORD}!, ${DB_NAME}!!`);
+  logger.info('Request received');
+  res.send(`Welcome to xyz !!`);
+  logger.error('Request processed');
 });
 
-app.listen(port, () => {
-  console.log(`Server running on http://${APP_HOST}:${port}`);
+app.listen(APP_PORT, () => {
+  console.log(`Server running on the http://${APP_HOST}:${APP_PORT}`);
 });

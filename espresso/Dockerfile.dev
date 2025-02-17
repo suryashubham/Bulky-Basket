@@ -4,6 +4,8 @@ WORKDIR /code/api
 
 COPY ./package.json ./package-lock.json ./
 
+RUN npm cache clean --force
+
 RUN npm install --legacy-peer-deps
 
 COPY src/ ./src
@@ -11,3 +13,4 @@ COPY src/ ./src
 #DEV
 EXPOSE 8000 9229
 
+CMD ["npm", "run", "dev"]

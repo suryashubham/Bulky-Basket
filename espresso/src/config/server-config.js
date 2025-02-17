@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
 
-console.log(process.env.DB_HOST);
-
-
-export default {
+module.exports = {
   //DB
   DB_HOST: process.env.DB_HOST,
   DB_PORT: process.env.PORT,
@@ -15,4 +12,5 @@ export default {
   APP_HOST: process.env.APP_HOST,
   APP_PORT: process.env.APP_PORT,
   APP_NAME: process.env.APP_NAME,
+  APP_ENV: process.env.APP_ENV,
 }
