@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 
 const { DatabaseError } = require('../utils/errors/database-error');
-const { logger } = require('../utils/common/logger');  
+const logger = require('../utils/common/logger');
 
 class CrudRepository {
     constructor(model) {
@@ -46,6 +46,11 @@ class CrudRepository {
                 id: id
             }
         })
+        return response;
+    }
+
+    async getByPrimaryContact(contactNumber) {
+        const response = await this.model.findOne({ where: { mobile: contactNumber } })
         return response;
     }
 }
