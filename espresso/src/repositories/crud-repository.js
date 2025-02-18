@@ -40,7 +40,7 @@ class CrudRepository {
         return response;
     }
 
-    async update(id, data) { // data -> {col: value, ....}
+    async update(id, data) {
         const response = await this.model.update(data, {
             where: {
                 id: id
@@ -49,9 +49,22 @@ class CrudRepository {
         return response;
     }
 
-    async getByPrimaryContact(contactNumber) {
-        const response = await this.model.findOne({ where: { mobile: contactNumber } })
-        return response;
+    async doesUserExist(query) {
+        try {
+            if (!query.userId && !query.mobile) {
+                throw new DatabaseError("Provide at least userId or mobile for the query.", StatusCodes.NOT_FOUND);
+            }
+
+            const whereCondition = {};
+            if (query.userId) whereCondition.id = query.userId;
+            if (query.mobile) whereCondition.mobile = query.mobile;
+
+            const user = await this.model.findOne({ where: whereCondition });
+            return !!user;
+        } catch (error) {
+            logger.error(`Error checking user existence:${error.message}`);
+            throw new DatabaseError("Error while checking the user", StatusCodes.NOT_FOUND);
+        }
     }
 }
 

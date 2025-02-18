@@ -29,7 +29,7 @@ async function createNewUser(req, res) {
             firstName: req.body.firstName,
             mobile: req.body.mobile,
             role: req.body.role,
-
+            password: req.body.password,
         })
         SuccessResponse.data = newUser;
         return res

@@ -1,9 +1,9 @@
-const { StatusCodes } = require('http-status-codes');
-const AppError = require('../utils/errors/app-error.js');
 const { SERVICE_LAYER } = require('../utils/common/constants');
-
-const logger = require('../utils/common/logger');
+const { StatusCodes } = require('http-status-codes');
 const { UserRepository } = require('../repositories');
+const { hashPassword } = require('../utils/crypt/passwordUtils')
+const AppError = require('../utils/errors/app-error.js');
+const logger = require('../utils/common/logger');
 
 
 const userRepo = new UserRepository();
@@ -18,32 +18,17 @@ async function getUsers() {
     }
 }
 async function addUser(data) {
-    /** TODO: re-write logic for cecking the duplicate user creation */
-    const ALREADY_EXISTING_USER = await alreadyExistingUser(data);
-    if (ALREADY_EXISTING_USER) throw new AppError('Already existing user', StatusCodes.INTERNAL_SERVER_ERROR,SERVICE_LAYER);
+    const ALREADY_EXISTING_USER = await userRepo.doesUserExist({ mobile: data.mobile });
+    if (ALREADY_EXISTING_USER) throw new AppError('Already existing user', StatusCodes.INTERNAL_SERVER_ERROR, SERVICE_LAYER);
 
     try {
+        data.password = await hashPassword(data.password);
         const users = await userRepo.create(data)
         return users;
     } catch (error) {
         logger.error(`Something went wrong in user service layer:${error}`)
         throw new AppError('Cannot create user ', StatusCodes.INTERNAL_SERVER_ERROR, SERVICE_LAYER);
     }
-}
-
-async function getUserWithContact(data) {
-    try {
-        const users = await userRepo.getByPrimaryContact(data)
-        return users;
-    } catch (error) {
-        logger.error(`Something went wrong in user  service layer:${error}`)
-        throw new AppError('Cannot fetch data of user with the given contact', StatusCodes.INTERNAL_SERVER_ERROR, SERVICE_LAYER);
-    }
-}
-
-async function alreadyExistingUser(data) {
-    const USER = await getUserWithContact(data.mobile);
-    return USER;
 }
 
 module.exports = {

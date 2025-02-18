@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       });
     }
+
+    toJSON() {
+      const attributes = { ...this.get() };
+      delete attributes.password;
+      return attributes;
+    }
   }
   User.init({
     id: {
@@ -80,6 +86,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
+    defaultScope:{
+      attributes: { exclude: ['password'] }
+    }
   });
   return User;
 };
