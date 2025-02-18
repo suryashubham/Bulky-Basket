@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     lastName: {
       type: DataTypes.STRING
     },
-    verified: {
+    mob_verified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
