@@ -4,6 +4,7 @@ const logger = require("../utils/common/logger");
 
 const SuccessResponse = require('../utils/common/success-response');
 const ErrorResponse = require('../utils/common/error-response');
+const setError = require('../utils/common/set-error');
 
 
 async function getAllUsers(req, res) {
@@ -14,7 +15,7 @@ async function getAllUsers(req, res) {
             .status(StatusCodes.OK)
             .json(SuccessResponse);
     } catch (error) {
-        logger.error(`${req.method} :Something went wrong in users controller layer:${error}`)
+        logger.error(`${req.method} :Something went wrong in users ${error.apiLayer} layer:${error}`)
         ErrorResponse.error = error;
         return res
             .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
@@ -35,8 +36,8 @@ async function createNewUser(req, res) {
             .status(StatusCodes.OK)
             .json(SuccessResponse);
     } catch (error) {
-        logger.error(`${req.method} : Something went wrong in users controller layer:${error}`)
-        ErrorResponse.error = error;
+        logger.error(`${req.method} : Something went wrong in users ${error.apiLayer} layer:${error}`)
+        ErrorResponse.error = setError(error);
         return res
             .status(error.statusCode)
             .json(ErrorResponse);

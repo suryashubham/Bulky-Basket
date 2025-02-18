@@ -2,8 +2,8 @@ const { StatusCodes } = require('http-status-codes');
 const BaseError = require('./base-error.js');
 
 class ExternalServiceError extends BaseError {
-    constructor(message) {
-        super('ExternalServiceError', message, StatusCodes.BAD_GATEWAY)
+    constructor(message, apiLayer) {
+        super('ExternalServiceError', message, StatusCodes.BAD_GATEWAY, apiLayer)
     }
 }
 

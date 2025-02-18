@@ -1,4 +1,3 @@
-
 const { UserController } = require('../../controllers');
 const { RequestValidationMiddleWare } = require('../../middlewares');
 
