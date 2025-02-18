@@ -17,9 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    toJSON() {
+    toJSON(options = {}) {
       const attributes = { ...this.get() };
-      delete attributes.password;
+      if (!options.includeSensitive) delete attributes.password;
       return attributes;
     }
   }

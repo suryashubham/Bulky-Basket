@@ -1,7 +1,7 @@
 const { SERVICE_LAYER } = require('../utils/common/constants');
 const { StatusCodes } = require('http-status-codes');
 const { UserRepository } = require('../repositories');
-const { hashPassword } = require('../utils/crypt/passwordUtils')
+const { hashPassword, verifyPassword } = require('../utils/crypt/passwordUtils')
 const AppError = require('../utils/errors/app-error.js');
 const logger = require('../utils/common/logger');
 
@@ -31,7 +31,24 @@ async function addUser(data) {
     }
 }
 
+async function authenticateUser(mobile, password) {
+    try {
+        const user = await userRepo.get({ mobile });
+        if (!user) throw new AppError('User not found', StatusCodes.NOT_FOUND, SERVICE_LAYER);
+
+        const isPasswordValid = await verifyPassword(password, user.password);
+        if (!isPasswordValid) throw new AppError('Invalid credentials', StatusCodes.UNAUTHORIZED, SERVICE_LAYER);
+        //todo: create a jwt token and return it
+        return user;
+    } catch (error) {
+        logger.error(`Something went wrong in user service layer:${error}`);
+        throw error;
+    }
+}
+
+
 module.exports = {
     getUsers,
-    addUser
+    addUser,
+    authenticateUser
 }

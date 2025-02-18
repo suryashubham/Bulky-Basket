@@ -5,6 +5,8 @@ const logger = require("../utils/common/logger");
 const SuccessResponse = require('../utils/common/success-response');
 const ErrorResponse = require('../utils/common/error-response');
 const setError = require('../utils/common/set-error');
+const GenericError = require('../utils/errors/generic-error');
+const { CONTROLLER_LAYER } = require('../utils/common/constants');
 
 
 async function getAllUsers(req, res) {
@@ -44,7 +46,28 @@ async function createNewUser(req, res) {
     }
 }
 
+async function loginUser(req, res) {
+    try {
+        const { mobile, password } = req.body;
+        const user = await UserService.authenticateUser(mobile, password);
+        if (!user) throw new GenericError('Invalid credentials', StatusCodes.UNAUTHORIZED, CONTROLLER_LAYER);
+
+        SuccessResponse.message = "Logged in successfully";
+        SuccessResponse.data = { jwt:user?.jwt || "" };
+        return res
+            .status(StatusCodes.OK)
+            .json(SuccessResponse);
+    } catch (error) {
+        logger.error(`${req.method} : Something went wrong in users ${error.apiLayer} layer:${error}`)
+        ErrorResponse.error = setError(error);
+        return res
+            .status(error.statusCode || StatusCodes.UNAUTHORIZED)
+            .json(ErrorResponse);
+    }
+}
+
 module.exports = {
     getAllUsers,
-    createNewUser
-}
+    createNewUser,
+    loginUser
+};

@@ -27,12 +27,16 @@ class CrudRepository {
     }
 
     async get(data) {
-        const response = await this.model.findByPk(data);
+        const whereCondition = {};
+        if (data.id) whereCondition.id = data.id;
+        if (data.mobile) whereCondition.mobile = data.mobile;
+
+        const response = await this.model.scope(null).findOne({ where: whereCondition });
         if (!response) {
             logger.error(`Something went wrong in CRUD Repo during get operation:${error}`)
-            throw new DatabaseError('Not able to fund the resource', StatusCodes.NOT_FOUND);
+            throw new DatabaseError('Not able to find the resource', StatusCodes.NOT_FOUND);
         }
-        return response;
+        return response.toJSON({ includeSensitive: true });;
     }
 
     async getAll() {
