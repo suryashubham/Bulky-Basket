@@ -1,3 +1,4 @@
 module.exports = {
-    RequestValidationMiddleWare: require('./request-validation-middleware')
+    RequestValidationMiddleWare: require('./request-validation-middleware'),
+    ErrorHandlerMiddleware: require('./error-handler-middleware'),
 }
