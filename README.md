@@ -23,7 +23,7 @@ userId is the column in the Address table that will store the ID of the User tha
 The foreignKey establishes that the Address will reference the User through this column.
 In this setup, the Address model will have a column userId that references the id column in the User table.
 
-3. Migrate command `npx sequelize-cli db:migrate`
+3. Migrate command `npx sequelize-cli db:migrate` should be run path: `espresso/src/`
 4. Undo a particular migration `sequelize db:migrate:undo --name <migration_file_name>`
 
 ## PSQL DB

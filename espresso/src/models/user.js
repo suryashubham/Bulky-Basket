@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       });
     }
+
+    toJSON(options = {}) {
+      const attributes = { ...this.get() };
+      if (!options.includeSensitive) delete attributes.password;
+      return attributes;
+    }
   }
   User.init({
     id: {
@@ -34,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     lastName: {
       type: DataTypes.STRING
     },
-    verified: {
+    mob_verified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
@@ -69,6 +75,10 @@ module.exports = (sequelize, DataTypes) => {
         len: [10, 12]
       }
     },
+    password: { 
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     bio: {
       type: DataTypes.TEXT,
       allowNull: true
@@ -76,6 +86,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
+    defaultScope:{
+      attributes: { exclude: ['password'] }
+    }
   });
   return User;
 };
