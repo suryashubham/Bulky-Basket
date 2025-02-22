@@ -1,6 +1,6 @@
-const {APP_ENV} = require('../../config/server-config');
+const { APP_ENV } = require('../../config/server-config');
 
-function setError(error) {
+function setErrorResponse(error) {
     try {
         let errorResponse = {
             errorType: error.errorType,
@@ -17,4 +17,16 @@ function setError(error) {
 
 }
 
-module.exports = setError;
+function setSuccessResponse(message, data) {
+    return {
+        success: true,
+        message: message || 'Successfully completed the request',
+        data: data || {},
+        error: {}
+    }
+}
+
+module.exports = { 
+    setErrorResponse, 
+    setSuccessResponse 
+};

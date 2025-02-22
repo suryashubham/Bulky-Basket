@@ -1,21 +1,21 @@
+const { setErrorResponse, setSuccessResponse } = require('../utils/common/setResponseConfig');
+const { CONTROLLER_LAYER } = require('../utils/common/constants');
 const { StatusCodes } = require('http-status-codes');
 const { UserService } = require('../services');
-const logger = require("../utils/common/logger");
 
-const SuccessResponse = require('../utils/common/success-response');
 const ErrorResponse = require('../utils/common/error-response');
-const setError = require('../utils/common/set-error');
 const GenericError = require('../utils/errors/generic-error');
-const { CONTROLLER_LAYER } = require('../utils/common/constants');
+
+const logger = require("../utils/common/logger");
 
 
 async function getAllUsers(req, res) {
     try {
         const usersList = await UserService.getUsers();
-        SuccessResponse.data = usersList;
+        const responseData = setSuccessResponse("Users fetched successfully", usersList);
         return res
             .status(StatusCodes.OK)
-            .json(SuccessResponse);
+            .json(responseData);
     } catch (error) {
         logger.error(`${req.method} :Something went wrong in users ${error.apiLayer} layer:${error}`)
         ErrorResponse.error = error;
@@ -33,13 +33,13 @@ async function createNewUser(req, res) {
             role: req.body.role,
             password: req.body.password,
         })
-        SuccessResponse.data = newUser;
+        const responseData = setSuccessResponse("User created successfully", newUser);
         return res
             .status(StatusCodes.OK)
-            .json(SuccessResponse);
+            .json(responseData);
     } catch (error) {
         logger.error(`${req.method} : Something went wrong in users ${error.apiLayer} layer:${error}`)
-        ErrorResponse.error = setError(error);
+        ErrorResponse.error = setErrorResponse(error);
         return res
             .status(error.statusCode)
             .json(ErrorResponse);
@@ -49,17 +49,20 @@ async function createNewUser(req, res) {
 async function loginUser(req, res) {
     try {
         const { mobile, password } = req.body;
-        const user = await UserService.authenticateUser(mobile, password);
+        const { user, token } = await UserService.authenticateUser(mobile, password);
         if (!user) throw new GenericError('Invalid credentials', StatusCodes.UNAUTHORIZED, CONTROLLER_LAYER);
-
-        SuccessResponse.message = "Logged in successfully";
-        SuccessResponse.data = { jwt:user?.jwt || "" };
+        //store user in a session
+        req.session.userId = user.id;
+        req.session.mobile = user.mobile;
+        //set cookie
+        res.cookie('token', token, { httpOnly: true });
+        const responseData = setSuccessResponse("Logged in successfully", { jwt: token ?? "" });
         return res
             .status(StatusCodes.OK)
-            .json(SuccessResponse);
+            .json(responseData);
     } catch (error) {
         logger.error(`${req.method} : Something went wrong in users ${error.apiLayer} layer:${error}`)
-        ErrorResponse.error = setError(error);
+        ErrorResponse.error = setErrorResponse(error);
         return res
             .status(error.statusCode || StatusCodes.UNAUTHORIZED)
             .json(ErrorResponse);

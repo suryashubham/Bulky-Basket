@@ -13,4 +13,9 @@ module.exports = {
   APP_PORT: process.env.APP_PORT,
   APP_NAME: process.env.APP_NAME,
   APP_ENV: process.env.APP_ENV,
+  //SESSION
+  SESSION_SECRET: process.env.SESSION_SECRET,
+  SESSION_VAIDITY: process.env.SESSION_VAIDITY,
+  //JWT
+  JWT_TOKEN_VALIDITY: process.env.JWT_TOKEN_VALIDITY,
 }

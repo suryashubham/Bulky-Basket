@@ -1,10 +1,10 @@
 const { SERVICE_LAYER } = require('../utils/common/constants');
 const { StatusCodes } = require('http-status-codes');
+const { generateJwtToken } = require('../utils/auth-utils/jwtUtils');
 const { UserRepository } = require('../repositories');
-const { hashPassword, verifyPassword } = require('../utils/crypt/passwordUtils')
+const { hashPassword, verifyPassword } = require('../utils/auth-utils/passwordUtils.js')
 const AppError = require('../utils/errors/app-error.js');
 const logger = require('../utils/common/logger');
-
 
 const userRepo = new UserRepository();
 
@@ -38,8 +38,12 @@ async function authenticateUser(mobile, password) {
 
         const isPasswordValid = await verifyPassword(password, user.password);
         if (!isPasswordValid) throw new AppError('Invalid credentials', StatusCodes.UNAUTHORIZED, SERVICE_LAYER);
-        //todo: create a jwt token and return it
-        return user;
+        const token = generateJwtToken(user);
+
+        return {
+            user,
+            token
+        };
     } catch (error) {
         logger.error(`Something went wrong in user service layer:${error}`);
         throw error;

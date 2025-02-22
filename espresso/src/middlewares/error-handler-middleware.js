@@ -1,11 +1,11 @@
-const setError = require('../utils/common/set-error');
+const { setErrorResponse } = require('../utils/common/setResponseConfig');
 
 const errorHandlerMiddleware = (err, req, res, next) => {
     const statusCode = err.statusCode;
 
     const errorResponse = {
         success: false,
-        error: setError(err),
+        error: setErrorResponse(err),
     };
 
     return res.status(statusCode).json(errorResponse);

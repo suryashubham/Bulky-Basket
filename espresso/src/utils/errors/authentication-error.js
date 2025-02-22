@@ -2,8 +2,8 @@ const { StatusCodes } = require('http-status-codes');
 const BaseError = require('./base-error.js');
 
 class AuthenticationError extends BaseError {
-    constructor(message, apiLayer) {
-        super('AuthenticationError', message, StatusCodes.UNAUTHORIZED, apiLayer)
+    constructor(message, statusCode, apiLayer) {
+        super('AuthenticationError', message, statusCode || StatusCodes.UNAUTHORIZED, apiLayer)
     }
 }
 
